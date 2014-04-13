@@ -5,7 +5,7 @@ var React = require('react');
 var Index = React.createClass({
   render: function () {
     return (
-      <div>Hack, it.</div>
+      <div className="index">Hack, it.</div>
     );
   }
 });
