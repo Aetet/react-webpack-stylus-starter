@@ -1,21 +1,27 @@
-var srcRoot = './src/';
-console.log('react', __dirname + '/lib/react/react.js');
+var srcRoot = './src/app/';
+console.log('react', __dirname + '/src/vendors/react/react.js');
 module.exports = {
   cache: true,
-  entry: srcRoot + "app.js",
+  watch: false,
+  entry: srcRoot + "indexJSX.jsx",
 
   output: {
     path: __dirname + '/public',
-    filename: 'bundle.js'
+    filename: 'js/bundle.js'
   },
-  module: {},
-  externals: {
-    react: 'react'
+
+  module: {
+    loaders: [
+      { test: /\.jsx$/, loader: "jsx" }
+    ]
   },
+  
   resolve: {
     alias: {
-      react: __dirname + '/src/js/app/lib/react/react.js',
-      root: __dirname + '/src/js/app/build'
-    }
+   //   react: __dirname + '/src/vendors/react/react.js',
+      root: __dirname + '/src/app'
+    },
+    modulesDirectories: ['bower_components', 'node_modules'],
+    extensions: [".jsx", '', ".webpack-loader.js", ".web-loader.js", ".loader.js", ".js"]
   }
 };
