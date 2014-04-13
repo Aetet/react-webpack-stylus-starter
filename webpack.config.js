@@ -3,7 +3,7 @@ console.log('react', __dirname + '/src/vendors/react/react.js');
 module.exports = {
   cache: true,
   watch: false,
-  entry: srcRoot + "indexJSX.jsx",
+  entry: srcRoot + "index.jsx",
 
   output: {
     path: __dirname + '/public',

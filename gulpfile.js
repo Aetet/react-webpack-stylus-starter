@@ -26,7 +26,6 @@ gulp.task('connect', function () {
     .listen(9002);
 });
 
-//TODO переделать с конкатенацией всех ресурсов в один файл
 gulp.task('styles', function () {
   gulp.src(paths.stylus)
     .pipe(stylus())
@@ -35,7 +34,6 @@ gulp.task('styles', function () {
 });
 
 gulp.task('webpack:build-dev', function (callback) {
-    // run webpack
   var devCompiler = webpack(myDevConfig);
   devCompiler.run(function(err, stats) {
     if(err) throw new gutil.PluginError("webpack:build-dev", err);
