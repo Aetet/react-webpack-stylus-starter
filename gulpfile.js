@@ -6,10 +6,12 @@ var webpack = require('webpack');
 var Notifier = require('node-notifier');
 var concat = require('gulp-concat');
 var connect = require('connect');
-var WebpackDevServer = require('webpack-dev-server');
 
 var myDevConfig = require('./webpack.config.js');
-var es = require('event-stream');
+
+var notify = function (options) {
+  new Notifier().notify(options);
+};
 
 var paths = {
   jsx: 'src/app/**/*.jsx',
@@ -32,15 +34,7 @@ gulp.task('styles', function () {
     .pipe(gulp.dest('public/css'));
 });
 
-gulp.task('react', function () {
-  return es.concat(
-    gulp.src(paths.jsx)
-    .pipe(react()),
-    gulp.src(paths.scripts)
-  ).pipe(gulp.dest('src/compiled'));
-});
-
-gulp.task('webpack:build-dev', ['react'], function (callback) {
+gulp.task('webpack:build-dev', function (callback) {
     // run webpack
   var devCompiler = webpack(myDevConfig);
   devCompiler.run(function(err, stats) {
@@ -49,35 +43,15 @@ gulp.task('webpack:build-dev', ['react'], function (callback) {
   });
 });
 
-gulp.task("build-dev-jsx-loader", ["webpack:build-dev"], function() {
-  gulp.watch(["src/app/**/*"], ["webpack:build-dev", 'notify']);
+gulp.task("watch-app", function() {
+  gulp.watch(["src/app/**/*", "src/app/**/*"], ["build-app"]);
 });
 
-gulp.task('notify', ['build-dev-jsx-loader'], function () {
-  var notifier = new Notifier();
-  notifier.notify({
-    title: 'My app',
-    message: 'Hello, Gulp!'
+gulp.task("build-app", ["webpack:build-dev", "styles"], function () {
+  notify({
+    title: 'Gulp Build',
+    message: 'App was built'
   });
-//  notify('Hello gulp!');
 });
 
-gulp.task('default', ['connect', 'styles', 'build-dev-jsx-loader', 'notify']);
-
-gulp.task("webpack-dev-server", function(callback) {
-    // Start a webpack-dev-server
-    var compiler = webpack(myDevConfig);
-
-    new WebpackDevServer(compiler, {
-        // server and middleware options
-    }).listen(9002, "localhost", function(err) {
-        if(err) throw new gutil.PluginError("webpack-dev-server", err);
-        // Server listening
-        gutil.log("[webpack-dev-server]", "http://localhost:9002/webpack-dev-server/index.html");
-
-        // keep the server alive or continue?
-        // callback();
-    });
-});
-
-
+gulp.task('default', ['connect', 'build-app', 'watch-app']);
