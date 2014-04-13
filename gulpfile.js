@@ -62,7 +62,7 @@ gulp.task('notify', ['build-dev-jsx-loader'], function () {
 //  notify('Hello gulp!');
 });
 
-gulp.task('default', ['connect', 'styles', 'build-dev-jsx-loader']);
+gulp.task('default', ['connect', 'styles', 'build-dev-jsx-loader', 'notify']);
 
 gulp.task("webpack-dev-server", function(callback) {
     // Start a webpack-dev-server
