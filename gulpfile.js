@@ -21,11 +21,13 @@ var paths = {
 };
 
 gulp.task('connect', function () {
+  console.log();
   var app = connect()
     .use(connect.static('public'))
     .listen(9002);
 });
 
+//Build all stylus files and and create main.css under public/css folder
 gulp.task('styles', function () {
   gulp.src(paths.stylus)
     .pipe(stylus())
@@ -33,6 +35,7 @@ gulp.task('styles', function () {
     .pipe(gulp.dest('public/css'));
 });
 
+//Build all jsx, js files with Webpack bundler
 gulp.task('webpack:build-dev', function (callback) {
   var devCompiler = webpack(myDevConfig);
   devCompiler.run(function(err, stats) {
@@ -41,10 +44,12 @@ gulp.task('webpack:build-dev', function (callback) {
   });
 });
 
+//Watch for every change in source
 gulp.task("watch-app", function() {
   gulp.watch(["src/app/**/*", "src/app/**/*"], ["build-app"]);
 });
 
+//Build application once. Pack scripts and build styles.
 gulp.task("build-app", ["webpack:build-dev", "styles"], function () {
   notify({
     title: 'Gulp Build',
@@ -52,4 +57,7 @@ gulp.task("build-app", ["webpack:build-dev", "styles"], function () {
   });
 });
 
-gulp.task('default', ['connect', 'build-app', 'watch-app']);
+//Default task for gulp
+gulp.task('default', ['connect', 'build-app', 'watch-app'], function () {
+  console.log('listen to Connect on 9002');
+});
