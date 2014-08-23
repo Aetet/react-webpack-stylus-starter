@@ -1,11 +1,10 @@
 var gulp = require('gulp');
-var react = require('gulp-react');
 var stylus = require('gulp-stylus');
-var notify = require('gulp-notify');
 var webpack = require('webpack');
 var Notifier = require('node-notifier');
 var concat = require('gulp-concat');
 var connect = require('connect');
+var lr = require('tiny-lr')();
 
 var myDevConfig = require('./webpack.config.js');
 
@@ -21,12 +20,28 @@ var paths = {
 };
 
 gulp.task('connect', function () {
-  console.log();
   var app = connect()
     .use(connect.static('public'))
     .listen(9002);
-});
 
+  lr.listen(35729);
+});
+gulp.task("webpack-dev-server", function(callback) {
+  // Start a webpack-dev-server
+  var compiler = webpack(myDevConfig);
+
+  new WebpackDevServer(compiler, {
+    publicPath: 'public/',
+    // server and middleware options
+  }).listen(8080, "localhost", function(err) {
+    if(err) throw new gutil.PluginError("webpack-dev-server", err);
+    // Server listening
+    console.log("[webpack-dev-server]", "http://localhost:8080/webpack-dev-server/index.html");
+
+    // keep the server alive or continue?
+    // callback();
+  });
+});
 //Build all stylus files and and create main.css under public/css folder
 gulp.task('styles', function () {
   gulp.src(paths.stylus)
@@ -46,18 +61,34 @@ gulp.task('webpack:build-dev', function (callback) {
 
 //Watch for every change in source
 gulp.task("watch-app", function() {
-  gulp.watch(["src/app/**/*", "src/app/**/*"], ["build-app"]);
+  gulp.watch(["src/app/**/*.jsx", "src/app/**/*.js"], ["build-js"]);
+  gulp.watch(["src/app/**/*.styl"], ["build-styles"]);
 });
 
 //Build application once. Pack scripts and build styles.
-gulp.task("build-app", ["webpack:build-dev", "styles"], function () {
+gulp.task("build-js", ["webpack:build-dev"], function () {
   notify({
     title: 'Gulp Build',
     message: 'App was built'
   });
+  lr.changed({body: {files: ['*']}});
+});
+gulp.task("build-styles", ["styles"], function () {
+  notify({
+    title: 'Gulp Build',
+    message: 'App was built'
+  });
+  lr.changed({body: {files: ['*']}});
 });
 
+gulp.task("build-app", ["webpack:build-dev","styles"], function () {
+  notify({
+    title: 'Gulp Build',
+    message: 'App was built'
+  });
+  lr.changed({body: {files: ['*']}});
+});
 //Default task for gulp
-gulp.task('default', ['connect', 'build-app', 'watch-app'], function () {
+gulp.task('default', ['connect','build-app', 'watch-app'], function () {
   console.log('listen to Connect on 9002');
 });

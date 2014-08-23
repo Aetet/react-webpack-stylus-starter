@@ -1,8 +1,7 @@
 var srcRoot = './src/app/';
-console.log('react', __dirname + '/src/vendors/react/react.js');
 module.exports = {
   cache: true,
-  watch: false,
+  watch: true,
   entry: srcRoot + "index.js",
 
   output: {
@@ -18,7 +17,6 @@ module.exports = {
   
   resolve: {
     alias: {
-   //   react: __dirname + '/src/vendors/react/react.js',
       root: __dirname + '/src/app'
     },
     modulesDirectories: ['bower_components', 'node_modules'],
