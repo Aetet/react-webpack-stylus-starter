@@ -1,8 +1,13 @@
 react-webpack-stylus-starter
 ============================
 
-Minimalistic project stub for [React.JS](http://facebook.github.io/react/index.html) with webpack as module system and Stylus for styling.
+Minimalistic project stub for [React.JS](http://facebook.github.io/react/index.html) with [webpack](http://webpack.github.io/) as module system and [stylus](http://learnboost.github.io/stylus/) for styling.
 
+##Installation:
+1. ```npm install```
+2. ```./gulp``` If you have *nix-system, or ```node_modules/.bin/gulp``` in other way.
+
+##What's Inside:
 For build project just run ```gulp``` from root of the project. And happens some magic:
 
 1. All ```.js``` and ```.jsx``` would be packed with [Webpack](https://github.com/webpack/webpack)
@@ -17,4 +22,4 @@ For build project just run ```gulp``` from root of the project. And happens some
 
 And sweet bonus LiveReload with [tiny-lr](tiny-lr)
 
-Enjoy your Hack!
+###Enjoy your Hack!
